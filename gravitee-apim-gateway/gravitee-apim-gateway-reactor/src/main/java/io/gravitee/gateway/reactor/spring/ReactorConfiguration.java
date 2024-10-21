@@ -26,6 +26,7 @@ import io.gravitee.gateway.core.component.ComponentProvider;
 import io.gravitee.gateway.env.GatewayConfiguration;
 import io.gravitee.gateway.env.RequestClientAuthConfiguration;
 import io.gravitee.gateway.env.RequestTimeoutConfiguration;
+import io.gravitee.gateway.opentelemetry.TracingContext;
 import io.gravitee.gateway.reactive.reactor.DefaultHttpRequestDispatcher;
 import io.gravitee.gateway.reactive.reactor.DefaultTcpSocketDispatcher;
 import io.gravitee.gateway.reactive.reactor.HttpRequestDispatcher;
@@ -53,6 +54,8 @@ import io.gravitee.gateway.reactor.processor.transaction.TraceContextProcessorFa
 import io.gravitee.gateway.reactor.processor.transaction.TransactionRequestProcessorFactory;
 import io.gravitee.gateway.report.ReporterService;
 import io.gravitee.node.api.Node;
+import io.gravitee.node.api.opentelemetry.Tracer;
+import io.gravitee.node.opentelemetry.OpenTelemetryFactory;
 import io.gravitee.plugin.alert.AlertEventProducer;
 import io.vertx.core.Vertx;
 import java.util.List;
@@ -156,7 +159,8 @@ public class ReactorConfiguration {
         @Value("${services.tracing.enabled:false}") boolean tracingEnabled,
         RequestTimeoutConfiguration requestTimeoutConfiguration,
         RequestClientAuthConfiguration requestClientAuthConfiguration,
-        Vertx vertx
+        Vertx vertx,
+        TracingContext tracingContext
     ) {
         return new DefaultHttpRequestDispatcher(
             gatewayConfiguration,
@@ -167,7 +171,7 @@ public class ReactorConfiguration {
             v3ResponseProcessorChainFactory,
             platformProcessorChainFactory,
             notFoundProcessorChainFactory,
-            tracingEnabled,
+            tracingContext,
             requestTimeoutConfiguration,
             requestClientAuthConfiguration,
             vertx

@@ -27,6 +27,7 @@ import io.gravitee.gateway.core.processor.provider.ProcessorProviderChain;
 import io.gravitee.gateway.env.GatewayConfiguration;
 import io.gravitee.gateway.env.RequestClientAuthConfiguration;
 import io.gravitee.gateway.env.RequestTimeoutConfiguration;
+import io.gravitee.gateway.opentelemetry.TracingContext;
 import io.gravitee.gateway.reactive.core.context.MutableExecutionContext;
 import io.gravitee.gateway.reactive.core.processor.ProcessorChain;
 import io.gravitee.gateway.reactive.reactor.handler.HttpAcceptorResolver;
@@ -37,6 +38,9 @@ import io.gravitee.gateway.reactor.handler.ReactorHandler;
 import io.gravitee.gateway.reactor.processor.RequestProcessorChainFactory;
 import io.gravitee.gateway.reactor.processor.ResponseProcessorChainFactory;
 import io.gravitee.gateway.report.ReporterService;
+import io.gravitee.node.api.Node;
+import io.gravitee.node.opentelemetry.OpenTelemetryFactory;
+import io.gravitee.node.opentelemetry.tracer.noop.NoOpTracer;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -74,6 +78,9 @@ class DefaultHttpRequestDispatcherTest {
 
     @Spy
     private final Vertx vertx = Vertx.vertx();
+
+    @Mock
+    private Node node;
 
     @Mock
     private GatewayConfiguration gatewayConfiguration;
@@ -124,6 +131,9 @@ class DefaultHttpRequestDispatcherTest {
     private RequestTimeoutConfiguration requestTimeoutConfiguration;
 
     @Mock
+    private OpenTelemetryFactory openTelemetryFactory;
+
+    @Mock
     private RequestClientAuthConfiguration requestClientAuthConfiguration;
 
     private DefaultHttpRequestDispatcher cut;
@@ -172,7 +182,7 @@ class DefaultHttpRequestDispatcherTest {
                 responseProcessorChainFactory,
                 platformProcessorChainFactory,
                 notFoundProcessorChainFactory,
-                false,
+                TracingContext.noop(),
                 requestTimeoutConfiguration,
                 requestClientAuthConfiguration,
                 vertx

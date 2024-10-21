@@ -44,6 +44,7 @@ import io.gravitee.gateway.core.invoker.EndpointInvoker;
 import io.gravitee.gateway.env.RequestTimeoutConfiguration;
 import io.gravitee.gateway.handlers.accesspoint.manager.AccessPointManager;
 import io.gravitee.gateway.handlers.api.definition.Api;
+import io.gravitee.gateway.opentelemetry.TracingContext;
 import io.gravitee.gateway.reactive.api.ExecutionFailure;
 import io.gravitee.gateway.reactive.api.ExecutionPhase;
 import io.gravitee.gateway.reactive.api.context.ExecutionContext;
@@ -66,6 +67,7 @@ import io.gravitee.gateway.reactive.policy.PolicyManager;
 import io.gravitee.gateway.resource.ResourceLifecycleManager;
 import io.gravitee.node.api.Node;
 import io.gravitee.node.api.configuration.Configuration;
+import io.gravitee.node.opentelemetry.tracer.noop.NoOpTracer;
 import io.gravitee.reporter.api.v4.metric.Metrics;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -241,16 +243,16 @@ class SyncApiReactorTest {
     void init() {
         lenient().when(apiDefinition.getProxy()).thenReturn(mock(Proxy.class));
         lenient().when(api.getDefinition()).thenReturn(apiDefinition);
-        when(flowChainFactory.createOrganizationFlow(api)).thenReturn(platformFlowChain);
-        when(flowChainFactory.createPlanFlow(api)).thenReturn(apiPlanFlowChain);
-        when(flowChainFactory.createApiFlow(api)).thenReturn(apiFlowChain);
+        when(flowChainFactory.createOrganizationFlow(api,TracingContext.noop())).thenReturn(platformFlowChain);
+        when(flowChainFactory.createPlanFlow(api,TracingContext.noop())).thenReturn(apiPlanFlowChain);
+        when(flowChainFactory.createApiFlow(api,TracingContext.noop())).thenReturn(apiFlowChain);
 
-        lenient().when(apiProcessorChainFactory.beforeHandle(api)).thenReturn(beforeHandleProcessors);
-        lenient().when(apiProcessorChainFactory.afterHandle(api)).thenReturn(afterHandleProcessors);
-        lenient().when(apiProcessorChainFactory.beforeSecurityChain(api)).thenReturn(beforeSecurityChainProcessors);
-        lenient().when(apiProcessorChainFactory.beforeApiExecution(api)).thenReturn(beforeApiFlowsProcessors);
-        lenient().when(apiProcessorChainFactory.afterApiExecution(api)).thenReturn(afterApiFlowsProcessors);
-        lenient().when(apiProcessorChainFactory.onError(api)).thenReturn(onErrorProcessors);
+        lenient().when(apiProcessorChainFactory.beforeHandle(api,TracingContext.noop())).thenReturn(beforeHandleProcessors);
+        lenient().when(apiProcessorChainFactory.afterHandle(api,TracingContext.noop())).thenReturn(afterHandleProcessors);
+        lenient().when(apiProcessorChainFactory.beforeSecurityChain(api,TracingContext.noop())).thenReturn(beforeSecurityChainProcessors);
+        lenient().when(apiProcessorChainFactory.beforeApiExecution(api,TracingContext.noop())).thenReturn(beforeApiFlowsProcessors);
+        lenient().when(apiProcessorChainFactory.afterApiExecution(api,TracingContext.noop())).thenReturn(afterApiFlowsProcessors);
+        lenient().when(apiProcessorChainFactory.onError(api,TracingContext.noop())).thenReturn(onErrorProcessors);
 
         lenient().when(beforeHandleProcessors.execute(ctx, ExecutionPhase.REQUEST)).thenReturn(spyBeforeHandleProcessors);
         lenient().when(afterHandleProcessors.execute(ctx, RESPONSE)).thenReturn(spyAfterHandleProcessors);
@@ -288,7 +290,8 @@ class SyncApiReactorTest {
                 node,
                 requestTimeoutConfiguration,
                 accessPointManager,
-                eventManager
+                eventManager,
+                TracingContext.noop()
             );
 
         lenient().when(ctx.getInternalAttribute(ATTR_INTERNAL_INVOKER)).thenReturn(invokerAdapter);
