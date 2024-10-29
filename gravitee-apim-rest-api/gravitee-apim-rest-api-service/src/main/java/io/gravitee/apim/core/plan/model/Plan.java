@@ -18,6 +18,7 @@ package io.gravitee.apim.core.plan.model;
 import io.gravitee.apim.core.exception.ValidationDomainException;
 import io.gravitee.common.utils.TimeProvider;
 import io.gravitee.definition.model.DefinitionVersion;
+import io.gravitee.definition.model.v4.ApiType;
 import io.gravitee.definition.model.v4.plan.AbstractPlan;
 import io.gravitee.definition.model.v4.plan.PlanMode;
 import io.gravitee.definition.model.v4.plan.PlanSecurity;
@@ -78,6 +79,8 @@ public class Plan implements GenericPlanEntity {
 
     private String apiId;
 
+    private ApiType apiType;
+
     private String environmentId;
 
     private int order;
@@ -111,7 +114,10 @@ public class Plan implements GenericPlanEntity {
     }
 
     public AbstractPlan getPlanDefinitionV4() {
-        return this.planDefinitionNativeV4 != null ? this.planDefinitionNativeV4 : this.planDefinitionHttpV4;
+        if (ApiType.NATIVE.equals(apiType)) {
+            return this.planDefinitionNativeV4;
+        }
+        return this.planDefinitionHttpV4;
     }
 
     @Override

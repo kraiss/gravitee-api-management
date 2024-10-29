@@ -47,6 +47,7 @@ public class PlanWithFlows extends Plan {
             plan.getValidation(),
             plan.getType(),
             plan.getApiId(),
+            plan.getApiType(),
             plan.getEnvironmentId(),
             plan.getOrder(),
             plan.getCharacteristics(),

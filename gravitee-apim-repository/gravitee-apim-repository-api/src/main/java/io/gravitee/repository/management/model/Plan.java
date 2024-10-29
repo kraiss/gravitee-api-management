@@ -16,6 +16,7 @@
 package io.gravitee.repository.management.model;
 
 import io.gravitee.definition.model.DefinitionVersion;
+import io.gravitee.definition.model.v4.ApiType;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -85,6 +86,11 @@ public class Plan {
      * The API used by this plan.
      */
     private String api;
+
+    /**
+     * The type of V4 API of this plan.
+     */
+    private ApiType apiType;
 
     /**
      * The ID of the environment related to this plan
