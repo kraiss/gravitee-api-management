@@ -300,6 +300,27 @@
       </mat-card-content>
     </mat-card>
 
+    <mat-card class="api-logging__form__card" formGroupName="OpenTelemetry">
+      <mat-card-content>
+        <h2 gioTableOfContents>OpenTelemetry</h2>
+        <p>Activate enabling or disabling OpenTelemetry tracing for individual APIs.</p>
+        <gio-form-slide-toggle
+          [matTooltip]="providedConfigurationMessage"
+          [matTooltipDisabled]="!isReadonly('logging.user.displayed')"
+          class="api-logging__form__card__form-field"
+        >
+          <mat-icon *ngIf="isReadonly('logging.user.displayed')" gioFormPrefix>lock</mat-icon>
+          <gio-form-label>Add</gio-form-label>
+          <mat-slide-toggle
+            gioFormSlideToggle
+            formControlName="displayed"
+            aria-label="Display end user on API Logging (in case of OAuth2/JWT plan)"
+            name="displayed"
+          ></mat-slide-toggle>
+        </gio-form-slide-toggle>
+      </mat-card-content>
+    </mat-card>
+
     <gio-save-bar [form]="apiLoggingForm" [formInitialValues]="formInitialValues"></gio-save-bar>
   </form>
 
