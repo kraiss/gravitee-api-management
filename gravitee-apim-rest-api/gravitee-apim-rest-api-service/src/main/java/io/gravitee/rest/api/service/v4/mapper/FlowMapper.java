@@ -22,6 +22,7 @@ import io.gravitee.definition.model.v4.flow.selector.ConditionSelector;
 import io.gravitee.definition.model.v4.flow.selector.HttpSelector;
 import io.gravitee.definition.model.v4.flow.selector.Selector;
 import io.gravitee.definition.model.v4.flow.step.Step;
+import io.gravitee.definition.model.v4.nativeapi.NativeFlow;
 import io.gravitee.repository.management.model.flow.FlowReferenceType;
 import io.gravitee.repository.management.model.flow.FlowStep;
 import io.gravitee.repository.management.model.flow.selector.FlowChannelSelector;
@@ -55,6 +56,22 @@ public class FlowMapper {
         definitionFlow.setPublish(repositoryFlow.getPublish().stream().map(this::toDefinition).collect(Collectors.toList()));
         definitionFlow.setSubscribe(repositoryFlow.getSubscribe().stream().map(this::toDefinition).collect(Collectors.toList()));
         definitionFlow.setSelectors(repositoryFlow.getSelectors().stream().map(this::toDefinition).collect(Collectors.toList()));
+        definitionFlow.setTags(repositoryFlow.getTags());
+        return definitionFlow;
+    }
+
+    public NativeFlow toNativeDefinition(io.gravitee.repository.management.model.flow.Flow repositoryFlow) {
+        if (repositoryFlow == null) {
+            throw new IllegalArgumentException("Flow to map cannot be null");
+        }
+        NativeFlow definitionFlow = new NativeFlow();
+        definitionFlow.setId(repositoryFlow.getId());
+        definitionFlow.setName(repositoryFlow.getName());
+        definitionFlow.setEnabled(repositoryFlow.isEnabled());
+        definitionFlow.setPublish(repositoryFlow.getPublish().stream().map(this::toDefinition).collect(Collectors.toList()));
+        definitionFlow.setSubscribe(repositoryFlow.getSubscribe().stream().map(this::toDefinition).collect(Collectors.toList()));
+        definitionFlow.setInteract(repositoryFlow.getInteract().stream().map(this::toDefinition).collect(Collectors.toList()));
+        definitionFlow.setConnect(repositoryFlow.getConnect().stream().map(this::toDefinition).collect(Collectors.toList()));
         definitionFlow.setTags(repositoryFlow.getTags());
         return definitionFlow;
     }
