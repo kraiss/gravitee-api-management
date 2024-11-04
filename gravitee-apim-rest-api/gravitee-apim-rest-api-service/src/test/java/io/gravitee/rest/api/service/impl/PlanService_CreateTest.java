@@ -112,7 +112,7 @@ public class PlanService_CreateTest {
 
         when(parameterService.findAsBoolean(any(), any(), any())).thenReturn(true);
         when(planRepository.create(any())).thenAnswer(i -> i.getArguments()[0]);
-        when(planConverter.toPlan(any(NewPlanEntity.class), any())).thenReturn(plan);
+        when(planConverter.toPlan(any(NewPlanEntity.class), any(), api.getType())).thenReturn(plan);
 
         mockApiDefinitionVersion(V2);
     }
@@ -140,7 +140,7 @@ public class PlanService_CreateTest {
 
         planService.create(GraviteeContext.getExecutionContext(), this.newPlanEntity);
 
-        verify(planConverter, times(1)).toPlan(newPlanEntity, V2);
+        verify(planConverter, times(1)).toPlan(newPlanEntity, V2, api.getType());
     }
 
     @Test
@@ -150,7 +150,7 @@ public class PlanService_CreateTest {
 
         planService.create(GraviteeContext.getExecutionContext(), this.newPlanEntity);
 
-        verify(planConverter, times(1)).toPlan(newPlanEntity, V1);
+        verify(planConverter, times(1)).toPlan(newPlanEntity, V1, api.getType());
     }
 
     @Test

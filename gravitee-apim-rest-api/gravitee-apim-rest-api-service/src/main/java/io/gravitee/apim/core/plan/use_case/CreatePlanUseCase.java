@@ -52,6 +52,7 @@ public class CreatePlanUseCase {
         plan.setEnvironmentId(api.getEnvironmentId());
         plan.setApiId(input.apiId);
         plan.setType(Plan.PlanType.API);
+        plan.setApiType(api.getType());
         plan.setPlanStatus(PlanStatus.STAGING);
         if (plan.getPlanMode() == null) {
             plan.setPlanMode(io.gravitee.definition.model.v4.plan.PlanMode.STANDARD);

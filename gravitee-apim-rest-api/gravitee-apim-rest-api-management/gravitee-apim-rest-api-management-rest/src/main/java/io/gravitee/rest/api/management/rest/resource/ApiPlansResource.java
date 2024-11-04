@@ -125,6 +125,7 @@ public class ApiPlansResource extends AbstractResource {
             .collect(Collectors.toList());
     }
 
+    // make sure we don't need to put api type. It's applicable only for api v4
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -145,6 +146,7 @@ public class ApiPlansResource extends AbstractResource {
         return Response.created(this.getLocationHeader(planEntity.getId())).entity(planEntity).build();
     }
 
+    // make sure we don't need to put api type. It's applicable only for api v4
     @PUT
     @Path("/{plan}")
     @Consumes(MediaType.APPLICATION_JSON)

@@ -166,6 +166,7 @@ public class ApiPlansResource extends AbstractResource {
             .links(computePaginationLinks(plans.size(), paginationParam));
     }
 
+    // populate the apiType field in the Plan entity
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -227,6 +228,7 @@ public class ApiPlansResource extends AbstractResource {
         return Response.ok(planMapper.mapGenericPlan(planEntity)).build();
     }
 
+    // during the update make sure we are not rewrite api type. We never change the api type
     @PUT
     @Path("/{planId}")
     @Consumes(MediaType.APPLICATION_JSON)

@@ -24,6 +24,7 @@ gravitee.*.log.*/*.log
 gravitee-**-webui/node/
 **/.settings
 **/report.*.json
+package-lock.json
 **/.vscode
 **/storybook-static
 **/.angular

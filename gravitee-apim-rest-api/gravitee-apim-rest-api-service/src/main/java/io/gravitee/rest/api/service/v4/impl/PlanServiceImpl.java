@@ -311,6 +311,7 @@ public class PlanServiceImpl extends AbstractService implements PlanService {
             newPlan.setPublishedAt(oldPlan.getPublishedAt());
             newPlan.setClosedAt(oldPlan.getClosedAt());
             newPlan.setMode(oldPlan.getMode());
+            newPlan.setApiType(oldPlan.getApiType());
             // for existing plans, needRedeployAt doesn't exist. We have to initialize it
             if (oldPlan.getNeedRedeployAt() == null) {
                 newPlan.setNeedRedeployAt(oldPlan.getUpdatedAt());
